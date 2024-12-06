@@ -11,9 +11,6 @@ components:
       memoryLimit: 1Gi
       cpuLimit: 500m
       mountSources: true
-      volumeMounts:
-        - name: projects
-          path: /projects
       endpoints:
         - name: http
           targetPort: 8080
@@ -37,7 +34,3 @@ commands:
       group:
         kind: run
         isDefault: true
-
-volumes:
-  - name: projects
-    size: 1Gi
