@@ -1,26 +1,43 @@
 schemaVersion: 2.1.0
 metadata:
-  name: hello-world
+  name: universal-developer
   version: 1.0.0
-  description: A simple devfile for running a Hello World application in Eclipse Che.
+  description: A devfile using the universal developer image.
 
 components:
-  - name: hello-world-container
+  - name: universal-developer-container
     container:
-      image: hello-world
-      memoryLimit: 512Mi
+      image: quay.io/devfile/universal-developer-image:ubi8-latest
+      memoryLimit: 1Gi
+      cpuLimit: 500m
+      mountSources: true
+      volumeMounts:
+        - name: projects
+          path: /projects
       endpoints:
-        - name: hello-world
-          targetPort: 80
+        - name: http
+          targetPort: 8080
           exposure: public
 
 commands:
-  - id: run-hello-world
+  - id: build-project
     exec:
-      component: hello-world-container
-      commandLine: "echo 'Hello World container is running!'"
-      workingDir: /
-      label: run
+      component: universal-developer-container
+      commandLine: "mvn clean install"
+      workingDir: /projects
+      group:
+        kind: build
+        isDefault: true
+
+  - id: run-application
+    exec:
+      component: universal-developer-container
+      commandLine: "java -jar target/app.jar"
+      workingDir: /projects
       group:
         kind: run
         isDefault: true
+
+volumes:
+  - name: projects
+    size: 1Gi
