@@ -43,7 +43,3 @@ commands:
       group:
         kind: run
         isDefault: true
-
-volumes:
-  - name: project-data
-    size: 1Gi
