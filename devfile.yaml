@@ -17,10 +17,19 @@ components:
           exposure: public
 
 commands:
+  - id: install-dependencies
+    exec:
+      component: universal-developer-container
+      commandLine: "npm install"
+      workingDir: /projects
+      group:
+        kind: build
+        isDefault: true
+
   - id: build-project
     exec:
       component: universal-developer-container
-      commandLine: "mvn clean install"
+      commandLine: "npm run build"
       workingDir: /projects
       group:
         kind: build
@@ -29,8 +38,12 @@ commands:
   - id: run-application
     exec:
       component: universal-developer-container
-      commandLine: "java -jar target/app.jar"
+      commandLine: "node server.js"
       workingDir: /projects
       group:
         kind: run
         isDefault: true
+
+volumes:
+  - name: project-data
+    size: 1Gi
